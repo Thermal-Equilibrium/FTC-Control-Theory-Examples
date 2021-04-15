@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-public class DrivetrainProportionalExample extends LinearOpMode {
+public class DrivetrainPIDExample extends LinearOpMode {
     DcMotorEx left;
     DcMotorEx right;
 
@@ -20,6 +20,10 @@ public class DrivetrainProportionalExample extends LinearOpMode {
 
     // proportional gain
     double Kp = 0.1;
+
+    // pid controllers set with arbitrary values, use at your own risk
+    PIDController leftController = new PIDController(0.5,0.1,0.2);
+    PIDController rightController = new PIDController(0.5,0.1,0.2);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -49,14 +53,12 @@ public class DrivetrainProportionalExample extends LinearOpMode {
          */
         while (opModeIsActive()) {
 
-                leftError = targetLeft - left.getCurrentPosition();
-                rightError = targetRight - right.getCurrentPosition();
-
-                left.setPower(leftError * Kp);
-                right.setPower(rightError * Kp);
+            left.setPower(leftController.output(targetLeft,left.getCurrentPosition()));
+            right.setPower(rightController.output(targetRight,right.getCurrentPosition()));
 
         }
 
 
     }
+
 }
