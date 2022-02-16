@@ -55,6 +55,7 @@ public class PIDController {
         double output = (error * Kp) + (integral * Ki) + (derivative * Kd);
 
         timer.reset();
+        lastError = error; 
 
         return output;
     }
